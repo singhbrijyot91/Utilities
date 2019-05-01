@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.opencsv.CSVReader;
 
-public class Comparison {
+public class Comparison extends ReadCsvPath{
 	static int rowCounter = 0;
 	static String[] header1;
 	static String[] header2;
@@ -27,8 +27,8 @@ public class Comparison {
 	
 
 	public static void readCSV() throws IOException {
-		Reader reader1 = Files.newBufferedReader(Paths.get("C:\\Users\\Ashmeet\\Documents\\Book1.csv"));
-		Reader reader2 = Files.newBufferedReader(Paths.get("C:\\Users\\Ashmeet\\Documents\\Book2.csv"));
+		Reader reader1 = Files.newBufferedReader(Paths.get(readCsvPaths("actualCSV")));
+		Reader reader2 = Files.newBufferedReader(Paths.get(readCsvPaths("expectedCSV")));
 
 		CSVReader csvReader1 = new CSVReader(reader1);
 		CSVReader csvReader2 = new CSVReader(reader2);
@@ -62,8 +62,8 @@ public class Comparison {
 	}
 	
 	public static boolean getRowCount() throws IOException {
-		Reader reader1 = Files.newBufferedReader(Paths.get("C:\\Users\\Ashmeet\\Documents\\Book1.csv"));
-		Reader reader2 = Files.newBufferedReader(Paths.get("C:\\Users\\Ashmeet\\Documents\\Book2.csv"));
+		Reader reader1 = Files.newBufferedReader(Paths.get(readCsvPaths("actualCSV")));
+		Reader reader2 = Files.newBufferedReader(Paths.get(readCsvPaths("expectedCSV")));
 
 		CSVReader csvReader1 = new CSVReader(reader1);
 		CSVReader csvReader2 = new CSVReader(reader2);
@@ -111,7 +111,7 @@ public class Comparison {
 				}
 			}
 			if (headerFlag && rowCounter == 0) {
-				System.out.println("CSV headers are equal");
+				System.out.println("CSV headers are equal : "+s1.length);
 
 			}
 			if (headerFlag && rowCounter != 0) {
