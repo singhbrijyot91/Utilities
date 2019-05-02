@@ -125,14 +125,14 @@ public class Comparison extends ReadCsvPath {
 			for (int i = 0; i < s1.length; i++) {
 				// Verify header values
 				if (rowCounter == 0) {
-					if (!s1[i].trim().equals(s2[i].trim())) {
+					if (!s1[i].trim().equalsIgnoreCase(s2[i].trim())) {
 						System.out.println("CSV1 header " + s1[i] + " is not equal to CSV2 header " + s2[i]);
 						logger.log(LogStatus.FAIL, "CSV1 header " + s1[i] + " is not equal to CSV2 header " + s2[i]);
 						headerFlag = false;
 
 					}
 					// verify values other then headers
-				} else if (!s1[i].trim().equals(s2[i].trim())) {
+				} else if (!s1[i].trim().equalsIgnoreCase(s2[i].trim())) {
 					System.out.println(header1[i] + " in CSV1 is " + s1[i] + " is not equal to " + header2[i]
 							+ " in CSV2 " + s2[i] + " in row number " + rowCounter);
 					logger.log(LogStatus.FAIL, header1[i] + " : "+ s1[i]+ " in CSV1 " +  " is not equal to " + header2[i]
