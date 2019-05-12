@@ -31,33 +31,49 @@ public class ReadFilesInFolder {
 		// Reporting
 		extent = new ExtentReports("./Report.html", true);
 		extent.loadConfig(new File(System.getProperty("user.dir") + "\\src\\main\\resources\\extent-config.xml"));
-		logger = extent.startTest("Comparing CSVs");
+		
+		// change expected results csv folder path
 		csvPathExpected = readFiles(new File("C:\\Users\\Ashmeet\\Documents\\Brijyot\\CSVFolder1"));
+		// change actual results csv folder path
 		csvPathActual = readFiles(new File("C:\\Users\\Ashmeet\\Documents\\Brijyot\\CSVFolder2"));
 
 		Collections.sort(csvPathExpected);
 		Collections.sort(csvPathActual);
 
 		if (csvPathExpected.size() == csvPathActual.size()) {
-
+			
 			for (int i = 0; i < csvPathExpected.size(); i++) {
 
-				if (csvPathExpected.get(i).substring(csvPathExpected.get(i).lastIndexOf("_")+1)
-						.equals(csvPathExpected.get(i).substring(csvPathActual.get(i).lastIndexOf("_")+1))) {
+				if (csvPathExpected.get(i).substring(csvPathExpected.get(i).lastIndexOf("_") + 1)
+						.equals(csvPathExpected.get(i).substring(csvPathActual.get(i).lastIndexOf("_") + 1))) {
 					try {
+						logger = extent.startTest("Comparing "
+								+ csvPathExpected.get(i).substring(csvPathExpected.get(i).lastIndexOf("_") + 1));
 						readCSV(csvPathExpected.get(i), csvPathActual.get(i));
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+					} finally {
+						extent.flush();
+						extent.endTest(logger);
+
 					}
 				} else {
 					System.out.println("Expected CSV does not match " + csvPathExpected.get(i) + " Actual csv path is "
 							+ csvPathActual.get(i));
 				}
 			}
+			extent.close();
 		} else {
+			logger = extent.startTest("Check number of CSVs in actual and expected folder");
+			logger.log(LogStatus.FAIL, "Number of CSVs in actual folder is " + csvPathActual.size()
+					+ " and in expected is " + csvPathExpected.size());
 			System.out.println("Number of csv files does not match in expected and actual folder");
+			extent.flush();
+			extent.endTest(logger);
+			extent.close();
 		}
+
 	}
 
 	public static List<String> readFiles(File folder) {
@@ -66,6 +82,7 @@ public class ReadFilesInFolder {
 			if (fileEntry.isDirectory()) {
 				readFiles(fileEntry);
 			} else {
+				// change endsWith to ".csv" for csv files and ".txt" for text files
 				if (fileEntry.getName().endsWith(".csv")) {
 					System.out.print(fileEntry.getName());
 					System.out.print(" --> " + fileEntry.getAbsolutePath());
